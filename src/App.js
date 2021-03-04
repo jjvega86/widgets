@@ -10,7 +10,7 @@ const App = (props) => {
         },
         {
             title: 'Why use React?',
-            content: 'React is the preferred way to create SPAsright now'
+            content: 'React is the preferred way to create SPAs right now'
         },
         {
             title: 'How do you use React?',
