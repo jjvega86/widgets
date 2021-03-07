@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Accordian = ({ items }) => {
+export default function Accordian({ items }){
   const [activeIndex, setActiveIndex] = useState(null); // this is array destructuring
 
   const onTitleClick = (index) => {
@@ -25,4 +25,3 @@ const Accordian = ({ items }) => {
   return <div className="ui styled accordion">{renderedItems}</div>;
 };
 
-export default Accordian;
