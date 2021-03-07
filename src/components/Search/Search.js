@@ -4,6 +4,7 @@ import axios from "axios";
 
 const Search = () => {
   const [term, setTerm] = useState("");
+  const [results, setResults] = useState([]);
 
   useEffect(() => {
     // when component is first rendered, run. Also run after every time term changes
