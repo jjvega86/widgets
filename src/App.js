@@ -12,7 +12,7 @@ const options = [
   {
     label: 'The Color Green',
     value: 'green'
-  }
+  },
   {
     label: 'A Shade of Blue',
     value: 'blue'
@@ -22,7 +22,7 @@ const options = [
 const App = () => {
   return (
     <div>
-      <Dropdown />
+      <Dropdown options={options} />
     </div>
   );
 };
