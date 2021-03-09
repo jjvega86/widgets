@@ -1,12 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const Dropdown = ({ options, selected, onSelectedChange }) => {
   const [open, setOpen] = useState(false);
+  const ref = useRef();
 
   useEffect(() => {
-    document.body.addEventListener("click", () => {
-      console.log("click");
-    });
+    document.body.addEventListener(
+      "click",
+      (event) => {
+        console.log('body');
+        if (ref.current && ref.current.contains(event.target)) {
+          // ref is referring to the top level element in the Dropdown component
+          // ref.current.contains is checking to see if the event was triggered inside that component
+          // if the event is anywhere else, it will close the dropdown
+          // otherwise, it does nothing
+          // sees whether or not the element clicked on is inside Dropdown component
+          // even though the 'item' elements in renderedItems are contained inside of the Dropdown component as children
+          // they are not included in the ref object, so clicking on an individual item will skip this condition
+          // and close the dropdown, same as clicking anywhere else in the body
+          return;
+        }
+        setOpen(false);
+      },
+      { capture: true }
+    );
   }, []);
 
   const renderedOptions = options.map((option) => {
@@ -17,18 +34,25 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
       <div
         key={option.value}
         className="item"
-        onClick={() => onSelectedChange(option)}
+        onClick={() => {
+          console.log('item');
+          onSelectedChange(option);
+        }}
       >
         {option.label}
       </div>
     );
   });
+
   return (
-    <div className="ui form">
+    <div ref={ref} className="ui form">
       <div className="field">
         <label className="label">Select A Color</label>
         <div
-          onClick={() => setOpen(!open)}
+          onClick={() => {
+            console.log('dropdown selection')
+            setOpen(!open);
+          }}
           className={`ui selection dropdown ${open ? "visible active" : ""}`}
         >
           <i className="dropdown icon"></i>{" "}
