@@ -5,25 +5,26 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
   const ref = useRef();
 
   useEffect(() => {
-    document.body.addEventListener(
-      "click",
-      (event) => {
-        console.log('body');
-        if (ref.current && ref.current.contains(event.target)) {
-          // ref is referring to the top level element in the Dropdown component
-          // ref.current.contains is checking to see if the event was triggered inside that component
-          // if the event is anywhere else, it will close the dropdown
-          // otherwise, it does nothing
-          // sees whether or not the element clicked on is inside Dropdown component
-          // even though the 'item' elements in renderedItems are contained inside of the Dropdown component as children
-          // they are not included in the ref object, so clicking on an individual item will skip this condition
-          // and close the dropdown, same as clicking anywhere else in the body
-          return;
-        }
-        setOpen(false);
-      },
-      { capture: true }
-    );
+    const onBodyClick = (event) => {
+      console.log("body");
+      if (ref.current && ref.current.contains(event.target)) {
+        // ref is referring to the top level element in the Dropdown component
+        // ref.current.contains is checking to see if the event was triggered inside that component
+        // if the event is anywhere else, it will close the dropdown
+        // otherwise, it does nothing
+        // sees whether or not the element clicked on is inside Dropdown component
+        // even though the 'item' elements in renderedItems are contained inside of the Dropdown component as children
+        // they are not included in the ref object, so clicking on an individual item will skip this condition
+        // and close the dropdown, same as clicking anywhere else in the body
+        return;
+      }
+      setOpen(false);
+    };
+    document.body.addEventListener("click", onBodyClick, { capture: true });
+
+    return () => {
+      document.body.removeEventListener(onBodyClick);
+    };
   }, []);
 
   const renderedOptions = options.map((option) => {
@@ -35,7 +36,7 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
         key={option.value}
         className="item"
         onClick={() => {
-          console.log('item');
+          console.log("item");
           onSelectedChange(option);
         }}
       >
@@ -50,7 +51,7 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
         <label className="label">Select A Color</label>
         <div
           onClick={() => {
-            console.log('dropdown selection')
+            console.log("dropdown selection");
             setOpen(!open);
           }}
           className={`ui selection dropdown ${open ? "visible active" : ""}`}
