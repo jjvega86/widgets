@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const Dropdown = ({ options, selected, onSelectedChange }) => {
+const Dropdown = ({ options, selected, onSelectedChange, label }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
 
   useEffect(() => {
     const onBodyClick = (event) => {
-      console.log("body");
       if (ref.current && ref.current.contains(event.target)) {
         // ref is referring to the top level element in the Dropdown component
         // ref.current.contains is checking to see if the event was triggered inside that component
@@ -23,7 +22,7 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
     document.body.addEventListener("click", onBodyClick, { capture: true });
 
     return () => {
-      document.body.removeEventListener(onBodyClick);
+      document.body.removeEventListener("click", onBodyClick);
     };
   }, []);
 
@@ -36,7 +35,6 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
         key={option.value}
         className="item"
         onClick={() => {
-          console.log("item");
           onSelectedChange(option);
         }}
       >
@@ -48,10 +46,9 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
   return (
     <div ref={ref} className="ui form">
       <div className="field">
-        <label className="label">Select A Color</label>
+        <label className="label">{label}</label>
         <div
           onClick={() => {
-            console.log("dropdown selection");
             setOpen(!open);
           }}
           className={`ui selection dropdown ${open ? "visible active" : ""}`}
